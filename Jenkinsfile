@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script{
                     echo "Building the code"
-                    echo "Building version $(NEW_VERSION)"
+                    echo "Building version ${NEW_VERSION}"
                 }
             }
 
