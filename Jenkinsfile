@@ -21,7 +21,7 @@ pipeline {
 
             
         }
-         stage('Test') {
+        stage('Test') {
             when{
                 expression{
                     params.ExecuteTests==true
@@ -32,10 +32,23 @@ pipeline {
                     echo "Testing the code"
                 }
             }
-
-            
-        }
-         stage('Deploy') {
+         }
+        stage('package'){
+            input{
+                message "select the version to package"
+                ok "version selected"
+                parameters{
+                    choice(name:'NEWAPP',choices:['2.1','2.2''2.3'])
+                }
+            }
+             steps{
+               script{
+                echo "Packaging the code"
+               }
+             }
+        }  
+        
+        stage('Deploy') {
             steps {
                 script{
                     echo "deploying the app "
