@@ -3,7 +3,7 @@ pipeline {
     parameters{
         string(name:'ENV',defaultvalue:'Test',description:'version to deploy')
         booleanParam(name:'ExecuteTests',defaultvalue:true,description:'decide to run tc')
-        choice(name:'APPVERSION',choices['1.1','1.2','1.3'])
+        choice(name:'APPVERSION',choices:['1.1','1.2','1.3'])
     }
 
    
