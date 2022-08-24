@@ -31,6 +31,8 @@ pipeline {
                 script{
                     echo "Testing the code"
                 }
+
+
             }
          }
         stage('package'){
@@ -50,6 +52,11 @@ pipeline {
         }  
         
         stage('Deploy') {
+            when{
+                expression{
+                    BRANCH_NAME=='dev'
+                }
+            }
             steps {
                 script{
                     echo "deploying the app "
