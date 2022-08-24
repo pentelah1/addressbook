@@ -1,71 +1,46 @@
 pipeline {
     agent any
-    parameters{
-        string(name:'ENV',defaultValue:'Test',description:'version to deploy')
-        booleanParam(name:'ExecuteTests',defaultValue:true,description:'decide to run tc')
-        choice(name:'APPVERSION',choices:['1.1','1.2','1.3'])
-    }
-    environment{
-        NEW_VERSION='2.1'
+    tools{
+        tool name: 'myjava', type: 'jdk'
+        tool name: 'Mymaven', type: 'maven'
     }
    
 
     stages {
-        stage('Build') {
+        stage('COMPILE') {
             steps {
                 script{
-                    echo "Building the code"
-                    echo "Building version ${NEW_VERSION}"
+                    echo "COMPILING THE CODE"
+                    git 'https://github.com/pentelah1/addressbook.git'
+                    sh 'mvn compile'
+                   
                 }
             }
 
             
         }
-        stage('Test') {
-            when{
-                expression{
-                    params.ExecuteTests==true
-                }
-            }
+        stage('UNITTEST') {
+           
             steps {
                 script{
-                    echo "Testing the code"
+                    echo "RUNNING THE UNIT TEST CASES"
+                    sh 'mvn test'
                 }
 
 
             }
          }
         stage('package'){
-            input{
-                message "select the version to package"
-                ok "version selected"
-                parameters{
-                    choice(name:'NEWAPP',choices:['2.1','2.2','2.3'])
-                }
-            }
+            
              steps{
                script{
-                echo "Packaging the code"
-                echo "packaging the version: ${NEWAPP}"
+                echo "PACKAGING THE CODE"
+                sh 'mvn package'
+              
                }
              }
         }  
         
-        stage('Deploy') {
-            when{
-                expression{
-                    BRANCH_NAME=='dev'
-                }
-            }
-            steps {
-                script{
-                    echo "deploying the app "
-                    echo "deploying the app to env: ${params.ENV}"
-                    echo "deploying the appversion: ${params.APPVERSION}"
-                }
-            }
-
-            
-        }
+        
     }
 }
