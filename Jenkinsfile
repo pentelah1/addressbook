@@ -38,7 +38,7 @@ pipeline {
                 }
             }
          }
-        stage('package'){
+        stage('package and build docker image on slave2'){
             agent any
             
              steps{
@@ -61,7 +61,7 @@ pipeline {
         }  
         
         stage('deploy the docker image'){
-            agent any{
+            agent any
                 steps{
                     script{
                         sshagent(['Test-server-key']) {
@@ -73,7 +73,7 @@ pipeline {
                         }
                     }
                 }
-            }
+            
         }
         
     }
